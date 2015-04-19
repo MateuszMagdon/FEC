@@ -1,0 +1,6 @@
+C:\Users\mateu_000\AndroidStudioProjects\FEC\Application\build\intermediates\classes\debug
+C:\Users\mateu_000\AndroidStudioProjects\FEC\Application\build\intermediates\pre-dexed\debug\support-annotations-21.0.2-6eb1c20b7a39e744bfdc562daa463ceef8e90e29.jar
+C:\Users\mateu_000\AndroidStudioProjects\FEC\Application\build\intermediates\pre-dexed\debug\classes-9705ff610b0a3bac4e915f34bdd351522f206e5a.jar
+C:\Users\mateu_000\AndroidStudioProjects\FEC\Application\build\intermediates\pre-dexed\debug\classes-dfdaa7184cfbe223a751563faf91fbe0f483dcfd.jar
+C:\Users\mateu_000\AndroidStudioProjects\FEC\Application\build\intermediates\pre-dexed\debug\internal_impl-21.0.2-a5bb83c0046adaa223ec2298ff06fcbf6a692d19.jar
+C:\Users\mateu_000\AndroidStudioProjects\FEC\Application\build\intermediates\pre-dexed\debug\classes-a7fef6dde0564946f83029ca21fa6ccee53d94f7.jar
