@@ -2,11 +2,11 @@
 <items version="2" >
 
     <item
-        jar="C:\Users\mateu_000\AndroidStudioProjects\FEC\Application\build\intermediates\exploded-aar\com.android.support\gridlayout-v7\21.0.2\classes.jar"
+        jar="C:\Users\mateu_000\AndroidStudioProjects\FEC\Application\build\intermediates\exploded-aar\com.android.support\cardview-v7\21.0.2\classes.jar"
         jumboMode="false"
         revision="21.1.2"
-        sha1="9742ced04aafd9ac97dd2c66c1aa0e32d2ae7e54">
-        <dex dex="C:\Users\mateu_000\AndroidStudioProjects\FEC\Application\build\intermediates\pre-dexed\debug\classes-dfdaa7184cfbe223a751563faf91fbe0f483dcfd.jar" />
+        sha1="b017100da14f9c158c9f5f2f508333c224b24a7c">
+        <dex dex="C:\Users\mateu_000\AndroidStudioProjects\FEC\Application\build\intermediates\pre-dexed\debug\classes-9705ff610b0a3bac4e915f34bdd351522f206e5a.jar" />
     </item>
     <item
         jar="C:\Users\mateu_000\AppData\Local\Android\sdk\extras\android\m2repository\com\android\support\support-annotations\21.0.2\support-annotations-21.0.2.jar"
@@ -16,11 +16,11 @@
         <dex dex="C:\Users\mateu_000\AndroidStudioProjects\FEC\Application\build\intermediates\pre-dexed\debug\support-annotations-21.0.2-6eb1c20b7a39e744bfdc562daa463ceef8e90e29.jar" />
     </item>
     <item
-        jar="C:\Users\mateu_000\AndroidStudioProjects\FEC\Application\build\intermediates\exploded-aar\com.android.support\cardview-v7\21.0.2\classes.jar"
+        jar="C:\Users\mateu_000\AndroidStudioProjects\FEC\Application\build\intermediates\exploded-aar\com.android.support\gridlayout-v7\21.0.2\classes.jar"
         jumboMode="false"
         revision="21.1.2"
-        sha1="b017100da14f9c158c9f5f2f508333c224b24a7c">
-        <dex dex="C:\Users\mateu_000\AndroidStudioProjects\FEC\Application\build\intermediates\pre-dexed\debug\classes-9705ff610b0a3bac4e915f34bdd351522f206e5a.jar" />
+        sha1="9742ced04aafd9ac97dd2c66c1aa0e32d2ae7e54">
+        <dex dex="C:\Users\mateu_000\AndroidStudioProjects\FEC\Application\build\intermediates\pre-dexed\debug\classes-dfdaa7184cfbe223a751563faf91fbe0f483dcfd.jar" />
     </item>
     <item
         jar="C:\Users\mateu_000\AndroidStudioProjects\FEC\Application\build\intermediates\exploded-aar\com.android.support\support-v4\21.0.2\classes.jar"
