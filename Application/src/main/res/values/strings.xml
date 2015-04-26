@@ -17,8 +17,9 @@
 <resources>
     <string name="welcome_message">Connection test</string>
 
-    <string name="fetch_text">Fetch</string>
+    <string name="fetch_text">Token</string>
     <string name="clear_text">Clear</string>
     <string name="connection_error">Connection error.</string>
     <string name="connection_ok">Connection OK.</string>
+    <string name="test_text">Test</string>
 </resources>

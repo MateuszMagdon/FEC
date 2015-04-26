@@ -278,7 +278,7 @@ containing a value of this type.
         public static final int center=0x7f090005;
         public static final int center_horizontal=0x7f090006;
         public static final int center_vertical=0x7f090007;
-        public static final int clear_action=0x7f090015;
+        public static final int clear_action=0x7f090016;
         public static final int clip_horizontal=0x7f090008;
         public static final int clip_vertical=0x7f090009;
         public static final int end=0x7f09000a;
@@ -292,6 +292,7 @@ containing a value of this type.
         public static final int log_fragment=0x7f090013;
         public static final int right=0x7f09000f;
         public static final int start=0x7f090010;
+        public static final int test_action=0x7f090015;
         public static final int top=0x7f090011;
         public static final int vertical=0x7f090001;
     }
@@ -308,7 +309,8 @@ containing a value of this type.
         public static final int connection_ok=0x7f060003;
         public static final int fetch_text=0x7f060004;
         public static final int intro_message=0x7f060005;
-        public static final int welcome_message=0x7f060006;
+        public static final int test_text=0x7f060006;
+        public static final int welcome_message=0x7f060007;
     }
     public static final class style {
         public static final int AppTheme=0x7f070000;

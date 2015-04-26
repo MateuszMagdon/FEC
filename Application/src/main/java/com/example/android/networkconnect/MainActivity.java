@@ -4,6 +4,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -25,11 +26,14 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 /**
  * Sample application demonstrating how to connect to the network and fetch raw
@@ -44,8 +48,7 @@ public class MainActivity extends FragmentActivity {
     public static final String TAG = "Network Connect";
     public static final String URI = "http://floodemergencycoordinator.apphb.com";
 
-    private PostRequestTask loginTask;
-
+    public JSONObject token = null;
     // Reference to the fragment showing events, so we can clear it with a button
     // as necessary.
     private LogFragment mLogFragment;
@@ -75,45 +78,85 @@ public class MainActivity extends FragmentActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.fetch_action:
-                logIn("testUser", "password");
+                token = logIn("testUser", "qwerty");
                 return true;
-            // Clear the log view fragment.
             case R.id.clear_action:
-              mLogFragment.getLogView().setText("");
-              return true;
+                mLogFragment.getLogView().setText("");
+                return true;
+            case R.id.test_action:
+                mLogFragment.getLogView().setText("");
+                getLocations();
+                return true;
         }
         return false;
     }
 
-    private String logIn(String username, String password){
-        loginTask = new PostRequestTask();
+    private JSONObject logIn(String username, String password){
+        PostRequestTask loginTask = new PostRequestTask();
         loginTask.addContent("grant_type", "password");
         loginTask.addContent("username", username);
         loginTask.addContent("password", password);
+        String url = "/Token";
 
-        loginTask.execute(URI + "/Token");
-
-        return loginTask.getResult();
+        return executeAsyncTakAndReturnResult(loginTask, url);
     }
 
     private void testConnection(){
         GetRequestTask task = new GetRequestTask();
-        task.addHeader("Authentication", "Bearer " + loginTask.getResult());
+        task.execute("/api/serviceUnit/testMessage");
+    }
 
-        task.execute(URI + "/api/serviceUnit/testMessage");
+    private void getLocations(){
+        GetRequestTask task = new GetRequestTask();
+        JSONObject result = executeAsyncTakAndReturnResult(task, "/api/serviceUnit/locations");
+    }
+
+    private void postLocation(){
+        PostRequestTask task = new PostRequestTask();
+        JSONObject result = executeAsyncTakAndReturnResult(task, "/api/serviceUnit/location");
+
+    }
+
+    private void getTasks() {
+        PostRequestTask task = new PostRequestTask();
+        JSONObject result = executeAsyncTakAndReturnResult(task, "/api/serviceUnit/location");
+    }
+
+    private void postTask(){
+
+    }
+
+    private void postBackupRequest(){
+
+    }
+
+    private JSONObject executeAsyncTakAndReturnResult(AsyncTask<String, String, String> task, String url) {
+        String result;
+        JSONObject jObject = null;
+
+        try {
+            result = task.execute(URI + url).get();
+            jObject = new JSONObject(result);
+
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+        return jObject;
     }
 
     private class GetRequestTask extends AsyncTask<String, String, String>{
 
-        private List<NameValuePair> nameValuePair = new ArrayList<>();
+        private List<NameValuePair> headersList = new ArrayList<>();
         private String result;
 
         public void addHeader(String name, String value){
-            nameValuePair.add(new BasicNameValuePair(name, value));
-        }
-
-        public String getResult() {
-            return result;
+            headersList.add(new BasicNameValuePair(name, value));
         }
 
         @Override
@@ -124,7 +167,11 @@ public class MainActivity extends FragmentActivity {
             try {
                 HttpGet get = new HttpGet(uri[0]);
 
-                for (NameValuePair pair : nameValuePair){
+                if (token != null){
+                    get.addHeader("Authorization", "Bearer " + token.getString("access_token"));
+                }
+
+                for (NameValuePair pair : headersList){
                     get.addHeader(pair.getName(), pair.getValue());
                 }
 
@@ -141,9 +188,11 @@ public class MainActivity extends FragmentActivity {
                     throw new IOException(statusLine.getReasonPhrase());
                 }
             } catch (ClientProtocolException e) {
-                //TODO Handle problems..
+                e.printStackTrace();
             } catch (IOException e) {
-                //TODO Handle problems..
+                e.printStackTrace();
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
             return responseString;
         }
@@ -182,11 +231,16 @@ public class MainActivity extends FragmentActivity {
             try {
                 HttpPost post = new HttpPost(uri[0]);
 
+                if (token != null){
+                    post.addHeader("Authentication", "Bearer " + token.getString("access_token"));
+                }
+
                 for (NameValuePair pair : headersList){
                     post.addHeader(pair.getName(), pair.getValue());
                 }
 
-                post.setEntity(new StringEntity("grant_type=password&username=testUser&password=qwerty"));
+                String body = prepareContent();
+                post.setEntity(new StringEntity(body));
 
                 response = httpclient.execute(post);
                 StatusLine statusLine = response.getStatusLine();
@@ -203,9 +257,22 @@ public class MainActivity extends FragmentActivity {
             } catch (ClientProtocolException e) {
                 //TODO Handle problems..
             } catch (IOException e) {
-                //TODO Handle problems..
+                Log.i(TAG, e.getMessage());
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
             return responseString;
+        }
+
+        private String prepareContent() {
+            String body = "";
+            for (NameValuePair pair: contentList) {
+                if (!body.equals("")){
+                    body += "&";
+                }
+                body += pair.getName() + "=" + pair.getValue();
+            }
+            return body;
         }
 
         @Override
@@ -216,13 +283,8 @@ public class MainActivity extends FragmentActivity {
         }
     }
 
-
     /** Create a chain of targets that will receive log data */
     public void initializeLogging() {
-
-        // Using Log, front-end to the logging chain, emulates
-        // android.util.log method signatures.
-
         // Wraps Android's native log framework
         LogWrapper logWrapper = new LogWrapper();
         Log.setLogNode(logWrapper);
