@@ -18,23 +18,23 @@
 
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent">
+    android:layout_height="fill_parent"
+    android:orientation="vertical">
     <fragment
-        android:name="com.example.android.networkconnect.SimpleTextFragment"
-        android:id="@+id/intro_fragment"
-        android:layout_weight="1"
+        android:id="@+id/tasks_fragment"
+        android:name="com.example.android.common.logger.LogFragment"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:layout_weight="1" />
     <View
         android:layout_width="fill_parent"
         android:layout_height="1dp"
         android:background="@android:color/darker_gray"/>
     <fragment
-        android:name="com.example.android.common.logger.LogFragment"
         android:id="@+id/log_fragment"
-        android:layout_weight="1"
+        android:name="com.example.android.common.logger.LogFragment"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:layout_weight="1" />
 </LinearLayout>

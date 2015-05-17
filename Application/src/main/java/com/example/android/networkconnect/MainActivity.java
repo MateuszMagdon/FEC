@@ -1,10 +1,8 @@
 package com.example.android.networkconnect;
 
 import android.location.Location;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
-import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -15,28 +13,9 @@ import com.example.android.common.logger.LogWrapper;
 import com.example.android.common.logger.MessageOnlyLogFilter;
 import com.example.android.networkconnect.model.Position;
 import com.example.android.networkconnect.model.Task;
-import com.example.android.networkconnect.model.TaskState;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.HttpStatus;
-import org.apache.http.NameValuePair;
-import org.apache.http.StatusLine;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicNameValuePair;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 /**
  * Sample application demonstrating how to connect to the network and fetch raw
@@ -59,10 +38,9 @@ public class MainActivity extends FragmentActivity {
         setContentView(R.layout.sample_main);
 
         // Initialize text fragment that displays intro text.
-        SimpleTextFragment introFragment = (SimpleTextFragment)
-                    getSupportFragmentManager().findFragmentById(R.id.intro_fragment);
-        introFragment.setText(R.string.welcome_message);
-        introFragment.getTextView().setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16.0f);
+//        TasksFragment tasksFragment = (TasksFragment)
+//                    getSupportFragmentManager().findFragmentById(R.id.tasks_fragment);
+        //introFragment.getTextView().setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16.0f);
 
         // Initialize the logging framework.
         initializeLogging();
