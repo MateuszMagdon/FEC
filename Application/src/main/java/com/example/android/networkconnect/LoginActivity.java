@@ -10,6 +10,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.json.JSONObject;
+
 /**
  * A login screen that offers login via email/password.
  */
@@ -30,23 +32,20 @@ public class LoginActivity extends Activity {
     }
 
     public void login(View view) {
-        if (username.getText().toString().equals("admin") &&
-                password.getText().toString().equals("admin")) {
+
+        String login = username.getText().toString();
+        String password = this.password.getText().toString();
+
+        JSONObject token = Communicator.logIn(login, password);
+
+        if (token != null) {
             Toast.makeText(getApplicationContext(), "Redirecting...",
                     Toast.LENGTH_SHORT).show();
         } else {
             Toast.makeText(getApplicationContext(), "Wrong Credentials",
                     Toast.LENGTH_SHORT).show();
-
         }
 
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
     }
 
 }
