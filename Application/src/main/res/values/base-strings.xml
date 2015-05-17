@@ -15,7 +15,7 @@
  limitations under the License.
 -->
 <resources>
-    <string name="app_name">NetworkConnect</string>
+    <string name="app_name">FEC</string>
     <string name="intro_message">
         <![CDATA[
         

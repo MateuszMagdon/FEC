@@ -1,18 +1,21 @@
 package com.example.android.networkconnect;
 
-import android.net.Uri;
+import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
-import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.example.android.common.logger.Log;
 import com.example.android.common.logger.LogFragment;
+import com.example.android.common.logger.LogView;
 import com.example.android.common.logger.LogWrapper;
 import com.example.android.common.logger.MessageOnlyLogFilter;
+import com.example.android.networkconnect.model.Position;
+import com.example.android.networkconnect.model.Task;
+import com.example.android.networkconnect.model.TaskState;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
@@ -20,12 +23,12 @@ import org.apache.http.NameValuePair;
 import org.apache.http.StatusLine;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -53,6 +56,9 @@ public class MainActivity extends FragmentActivity {
     // as necessary.
     private LogFragment mLogFragment;
 
+    private List<Location> locations = new ArrayList<Location>();
+    private List<Task> tasks = new ArrayList<Task>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,6 +72,8 @@ public class MainActivity extends FragmentActivity {
 
         // Initialize the logging framework.
         initializeLogging();
+
+        token = logIn("testUser", "qwerty");
     }
 
     @Override
@@ -76,26 +84,48 @@ public class MainActivity extends FragmentActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        LogView logView = mLogFragment.getLogView();
         switch (item.getItemId()) {
-            case R.id.fetch_action:
-                token = logIn("testUser", "qwerty");
-                return true;
-            case R.id.clear_action:
-                mLogFragment.getLogView().setText("");
-                return true;
-            case R.id.test_action:
-                mLogFragment.getLogView().setText("");
+            case R.id.map:
+                logView.setText("Fetching locations...");
                 getLocations();
+                return true;
+//            case R.id.create_task:
+//                logView.setText("Creating new task...");
+//                postTask(new Task(1,"name","desc",TaskState.OPEN,new Position(0.123f, 0.456f)));
+//                return true;
+            case R.id.tasks:
+                logView.setText("Fetching tasks...");
+                getTasks();
                 return true;
         }
         return false;
     }
 
+    public Position fetchCurrentPosition(){
+        throw new UnsupportedOperationException();
+    }
+
+    private String prepareContent(List<NameValuePair> contentList) {
+        String body = "";
+        for (NameValuePair pair: contentList) {
+            if (!body.equals("")){
+                body += "&";
+            }
+            body += pair.getName() + "=" + pair.getValue();
+        }
+        return body;
+    }
+
     private JSONObject logIn(String username, String password){
+        List<NameValuePair> contentList = new ArrayList<>();
+        contentList.add(new BasicNameValuePair("grant_type", "password"));
+        contentList.add(new BasicNameValuePair("username", username));
+        contentList.add(new BasicNameValuePair("password", password));
+
         PostRequestTask loginTask = new PostRequestTask();
-        loginTask.addContent("grant_type", "password");
-        loginTask.addContent("username", username);
-        loginTask.addContent("password", password);
+
+        loginTask.addContent(prepareContent(contentList));
         String url = "/Token";
 
         return executeAsyncTakAndReturnResult(loginTask, url);
@@ -108,26 +138,30 @@ public class MainActivity extends FragmentActivity {
 
     private void getLocations(){
         GetRequestTask task = new GetRequestTask();
-        JSONObject result = executeAsyncTakAndReturnResult(task, "/api/serviceUnit/locations");
+        JSONArray result = executeAsyncTakAndReturnResultInArray(task, "/api/serviceUnit/locations");
     }
 
-    private void postLocation(){
+    private void postLocation(Position position){
         PostRequestTask task = new PostRequestTask();
+        task.addContent(position.toJSON().toString());
         JSONObject result = executeAsyncTakAndReturnResult(task, "/api/serviceUnit/location");
-
     }
 
     private void getTasks() {
+        GetRequestTask task = new GetRequestTask();
+        JSONArray result = executeAsyncTakAndReturnResultInArray(task, "/api/serviceUnit/tasks");
+    }
+
+    private void postTask(Task taskToPost){
         PostRequestTask task = new PostRequestTask();
-        JSONObject result = executeAsyncTakAndReturnResult(task, "/api/serviceUnit/location");
+        task.addContent(taskToPost.toJSON());
+        JSONObject result = executeAsyncTakAndReturnResult(task, "/api/serviceUnit/task");
     }
 
-    private void postTask(){
-
-    }
-
-    private void postBackupRequest(){
-
+    private void postBackupRequest(int taskId){
+        PostRequestTask task = new PostRequestTask();
+        task.addContent("{TaskId: " + taskId + " }");
+        JSONObject result = executeAsyncTakAndReturnResult(task, "/api/serviceUnit/backupRequest");
     }
 
     private JSONObject executeAsyncTakAndReturnResult(AsyncTask<String, String, String> task, String url) {
@@ -137,6 +171,26 @@ public class MainActivity extends FragmentActivity {
         try {
             result = task.execute(URI + url).get();
             jObject = new JSONObject(result);
+
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+        return jObject;
+    }
+
+    private JSONArray executeAsyncTakAndReturnResultInArray(AsyncTask<String, String, String> task, String url) {
+        String result;
+        JSONArray jObject = null;
+
+        try {
+            result = task.execute(URI + url).get();
+            jObject = new JSONArray(result);
 
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -175,6 +229,9 @@ public class MainActivity extends FragmentActivity {
                     get.addHeader(pair.getName(), pair.getValue());
                 }
 
+                get.addHeader("Content-Type", "application/json");
+                get.addHeader("Accept", "application/json");
+
                 response = httpclient.execute(get);
                 StatusLine statusLine = response.getStatusLine();
                 if(statusLine.getStatusCode() == HttpStatus.SC_OK){
@@ -208,16 +265,22 @@ public class MainActivity extends FragmentActivity {
     private class PostRequestTask extends AsyncTask<String, String, String>{
 
         private List<NameValuePair> headersList = new ArrayList<>();
-        private List<NameValuePair> contentList = new ArrayList<>();
+        //private List<NameValuePair> contentList = new ArrayList<>();
+        private String content;
         private String result;
 
         public void addHeader(String name, String value){
             headersList.add(new BasicNameValuePair(name, value));
         }
 
-        public void addContent(String name, String value){
-            contentList.add(new BasicNameValuePair(name, value));
+//        public void addContent(String name, String value){
+//            contentList.add(new BasicNameValuePair(name, value));
+//        }
+//
+        public void addContent(String content){
+            this.content = content;
         }
+
 
         public String getResult() {
             return result;
@@ -232,15 +295,18 @@ public class MainActivity extends FragmentActivity {
                 HttpPost post = new HttpPost(uri[0]);
 
                 if (token != null){
-                    post.addHeader("Authentication", "Bearer " + token.getString("access_token"));
+                    post.addHeader("Authorization", "Bearer " + token.getString("access_token"));
                 }
 
                 for (NameValuePair pair : headersList){
                     post.addHeader(pair.getName(), pair.getValue());
                 }
 
-                String body = prepareContent();
-                post.setEntity(new StringEntity(body));
+                //String content = prepareContent();
+                post.setEntity(new StringEntity(content));
+
+                post.addHeader("Content-Type", "application/json");
+                post.addHeader("Accept", "application/json");
 
                 response = httpclient.execute(post);
                 StatusLine statusLine = response.getStatusLine();
@@ -264,16 +330,16 @@ public class MainActivity extends FragmentActivity {
             return responseString;
         }
 
-        private String prepareContent() {
-            String body = "";
-            for (NameValuePair pair: contentList) {
-                if (!body.equals("")){
-                    body += "&";
-                }
-                body += pair.getName() + "=" + pair.getValue();
-            }
-            return body;
-        }
+//        private String prepareContent() {
+//            String body = "";
+//            for (NameValuePair pair: contentList) {
+//                if (!body.equals("")){
+//                    body += "&";
+//                }
+//                body += pair.getName() + "=" + pair.getValue();
+//            }
+//            return body;
+//        }
 
         @Override
         protected void onPostExecute(String result) {

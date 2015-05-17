@@ -15,13 +15,10 @@
   -->
 
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:id="@+id/fetch_action"
+    <item android:id="@+id/map"
         android:showAsAction="ifRoom|withText"
-        android:title="@string/fetch_text" />
-    <item android:id="@+id/test_action"
+        android:title="@string/map" />
+    <item android:id="@+id/tasks"
         android:showAsAction="ifRoom|withText"
-        android:title="@string/test_text" />
-    <item android:id="@+id/clear_action"
-        android:showAsAction="ifRoom|withText"
-        android:title="@string/clear_text" />
+        android:title="@string/tasks" />
 </menu>
