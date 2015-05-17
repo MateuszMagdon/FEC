@@ -1,13 +1,11 @@
 package com.example.android.networkconnect;
 
 import android.app.Activity;
-import android.graphics.Color;
+import android.content.Intent;
 import android.os.Bundle;
-import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONObject;
@@ -39,8 +37,10 @@ public class LoginActivity extends Activity {
         JSONObject token = Communicator.logIn(login, password);
 
         if (token != null) {
+            Intent intent = new Intent(this, MainActivity.class);
             Toast.makeText(getApplicationContext(), "Redirecting...",
                     Toast.LENGTH_SHORT).show();
+            startActivity(intent);
         } else {
             Toast.makeText(getApplicationContext(), "Wrong Credentials",
                     Toast.LENGTH_SHORT).show();
