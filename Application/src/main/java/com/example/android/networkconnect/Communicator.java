@@ -1,29 +1,19 @@
 package com.example.android.networkconnect;
 
+import android.location.Location;
 import android.os.AsyncTask;
 
-import com.example.android.common.logger.Log;
 import com.example.android.networkconnect.model.Position;
 import com.example.android.networkconnect.model.Task;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.HttpStatus;
 import org.apache.http.NameValuePair;
-import org.apache.http.StatusLine;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -32,7 +22,8 @@ import java.util.concurrent.ExecutionException;
  */
 public class Communicator {
     public static final String URI = "http://floodemergencycoordinator.apphb.com";
-
+    public static List<Task> Tasks;
+    public static List<Location> Locations;
     private static JSONObject token = null;
 
     private static String prepareContent(List<NameValuePair> contentList) {
@@ -44,6 +35,11 @@ public class Communicator {
             body += pair.getName() + "=" + pair.getValue();
         }
         return body;
+    }
+
+    public static void refresh() {
+        getTasks();
+//        getLocations();
     }
 
     public static JSONObject logIn(String username, String password){
@@ -77,9 +73,34 @@ public class Communicator {
         JSONObject result = executeAsyncTakAndReturnResult(task, "/api/serviceUnit/location");
     }
 
-    public static void getTasks() {
+    private static List<Task> getTasks() {
         GetRequestTask task = new GetRequestTask(token);
-        JSONArray result = executeAsyncTakAndReturnResultInArray(task, "/api/serviceUnit/tasks");
+        JSONArray jsonArray = executeAsyncTakAndReturnResultInArray(task, "/api/serviceUnit/tasks");
+
+        Tasks = parseTasksArray(jsonArray);
+        return Tasks;
+    }
+
+    private static List<Task> parseTasksArray(JSONArray jsonArray) {
+        LinkedList<Task> result = new LinkedList<>();
+        try {
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject jsonobject = jsonArray.getJSONObject(i);
+                int id = jsonobject.getInt("Id");
+                String name = jsonobject.getString("Name");
+                String description = jsonobject.getString("Description");
+                int state = jsonobject.getInt("TaskState");
+                JSONObject jsonPosition = jsonobject.getJSONObject("Position");
+                double lat = jsonPosition.getDouble("latitude");
+                double lon = jsonPosition.getDouble("longitude");
+
+                Task currentTask = new Task(id, name, description, state, lat, lon);
+                result.add(currentTask);
+            }
+        } catch (JSONException e) {
+
+        }
+        return result;
     }
 
     public static void postTask(Task taskToPost){

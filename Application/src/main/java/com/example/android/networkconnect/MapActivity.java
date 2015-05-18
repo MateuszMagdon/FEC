@@ -1,5 +1,6 @@
 package com.example.android.networkconnect;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.view.Menu;
@@ -8,33 +9,35 @@ import android.view.MenuItem;
 import com.example.android.networkconnect.model.Task;
 
 
-public class TaskDetailsActivity extends FragmentActivity implements OnFragmentInteractionListener {
+public class MapActivity extends FragmentActivity implements OnFragmentInteractionListener {
 
-    private TaskDetailsFragment detailsFragment;
+    private MapFragment mapFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_task_details);
+        setContentView(R.layout.activity_map);
 
-        detailsFragment = (TaskDetailsFragment) getSupportFragmentManager().findFragmentById(R.id.task_details_fragment);
+        mapFragment = (MapFragment) getSupportFragmentManager().findFragmentById(R.id.map_fragment);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_task_details, menu);
+        getMenuInflater().inflate(R.menu.menu_map, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
         switch (item.getItemId()) {
+            case R.id.tasks_button:
+                Intent intent = new Intent(this, MainActivity.class);
+                startActivity(intent);
+                return true;
             case R.id.refresh_button:
                 Communicator.refresh();
                 return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 

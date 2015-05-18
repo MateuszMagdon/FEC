@@ -5,6 +5,6 @@ package com.example.android.networkconnect.model;
  */
 public enum TaskState {
     OPEN,
-    RESOLVED,
+    IN_PROGRESS,
     FINISHED
 }

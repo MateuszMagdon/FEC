@@ -1,21 +1,13 @@
 package com.example.android.networkconnect;
 
-import android.location.Location;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.example.android.common.logger.Log;
-import com.example.android.common.logger.LogFragment;
-import com.example.android.common.logger.LogView;
-import com.example.android.common.logger.LogWrapper;
-import com.example.android.common.logger.MessageOnlyLogFilter;
 import com.example.android.networkconnect.model.Position;
 import com.example.android.networkconnect.model.Task;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Sample application demonstrating how to connect to the network and fetch raw
@@ -25,25 +17,32 @@ import java.util.List;
  * This sample uses the logging framework to display log output in the log
  * fragment (LogFragment).
  */
-public class MainActivity extends FragmentActivity {
+public class MainActivity extends FragmentActivity implements OnFragmentInteractionListener {
 
-    private LogFragment mLogFragment;
-
-    private List<Location> locations = new ArrayList<Location>();
-    private List<Task> tasks = new ArrayList<Task>();
+    private final static String task_json = "TASK_JSON";
+    private TasksFragment tasksFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.sample_main);
 
-        // Initialize text fragment that displays intro text.
-//        TasksFragment tasksFragment = (TasksFragment)
-//                    getSupportFragmentManager().findFragmentById(R.id.tasks_fragment);
-        //introFragment.getTextView().setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16.0f);
+        tasksFragment = (TasksFragment)
+                getSupportFragmentManager().findFragmentById(R.id.tasks_fragment);
+    }
 
-        // Initialize the logging framework.
-        initializeLogging();
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.map_button:
+                goToMapActivity();
+                return true;
+            case R.id.refresh_button:
+                Communicator.refresh();
+                Communicator.postLocation(fetchCurrentPosition());
+                return true;
+        }
+        return false;
     }
 
     @Override
@@ -52,43 +51,20 @@ public class MainActivity extends FragmentActivity {
         return true;
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        LogView logView = mLogFragment.getLogView();
-        switch (item.getItemId()) {
-            case R.id.map:
-                logView.setText("Fetching locations...");
-                Communicator.getLocations();
-                return true;
-//            case R.id.create_task:
-//                logView.setText("Creating new task...");
-//                postTask(new Task(1,"name","desc",TaskState.OPEN,new Position(0.123f, 0.456f)));
-//                return true;
-            case R.id.tasks:
-                logView.setText("Fetching tasks...");
-                Communicator.getTasks();
-                return true;
-        }
-        return false;
-    }
-
-    public Position fetchCurrentPosition(){
+    private Position fetchCurrentPosition() {
         throw new UnsupportedOperationException();
     }
 
-    /** Create a chain of targets that will receive log data */
-    public void initializeLogging() {
-        // Wraps Android's native log framework
-        LogWrapper logWrapper = new LogWrapper();
-        Log.setLogNode(logWrapper);
+    private void goToMapActivity() {
+        Intent intent = new Intent(this, MapActivity.class);
+        startActivity(intent);
+    }
 
-        // A filter that strips out everything except the message text.
-        MessageOnlyLogFilter msgFilter = new MessageOnlyLogFilter();
-        logWrapper.setNext(msgFilter);
+    @Override
+    public void onFragmentInteraction(Task task) {
 
-        // On screen logging via a fragment with a TextView.
-        mLogFragment =
-                (LogFragment) getSupportFragmentManager().findFragmentById(R.id.log_fragment);
-        msgFilter.setNext(mLogFragment.getLogView());
+        Intent intent = new Intent(this, TaskDetailsActivity.class);
+        intent.putExtra(task_json, task.toJSON());
+        startActivity(intent);
     }
 }

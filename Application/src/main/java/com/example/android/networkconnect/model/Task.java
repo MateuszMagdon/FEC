@@ -15,12 +15,22 @@ public class Task {
     public TaskState TaskState;
     public Position Position;
 
-    public Task(int id, String name, String descriprion, TaskState taskState, Position position) {
+    public Task(int id, String name, String descriprion, int taskState, double latitude, double longitude) {
         Id = id;
         Name = name;
         Descriprion = descriprion;
-        TaskState = taskState;
-        Position = position;
+        switch (taskState) {
+            case 0:
+                TaskState = com.example.android.networkconnect.model.TaskState.OPEN;
+                break;
+            case 1:
+                TaskState = com.example.android.networkconnect.model.TaskState.IN_PROGRESS;
+                break;
+            case 2:
+                TaskState = com.example.android.networkconnect.model.TaskState.FINISHED;
+                break;
+        }
+        Position = new Position(latitude, longitude);
     }
 
     public String toJSON(){
@@ -35,5 +45,10 @@ public class Task {
             e.printStackTrace();
         }
         return object.toString();
+    }
+
+    @Override
+    public String toString() {
+        return Id + "\n" + Descriprion;
     }
 }

@@ -34,9 +34,13 @@ public class LoginActivity extends Activity {
         String login = username.getText().toString();
         String password = this.password.getText().toString();
 
+        login = "testUser";
+        password = "qwerty";
+
         JSONObject token = Communicator.logIn(login, password);
 
         if (token != null) {
+            Communicator.refresh();
             Intent intent = new Intent(this, MainActivity.class);
             Toast.makeText(getApplicationContext(), "Redirecting...",
                     Toast.LENGTH_SHORT).show();

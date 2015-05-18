@@ -1,7 +1,24 @@
-<fragment xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/fragment"
-    android:name="com.example.android.networkconnect.TaskDetailsActivityFragment"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:layout="@layout/fragment_task_details" />
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical">
+
+    <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/task_details_fragment"
+        android:name="com.example.android.networkconnect.TaskDetailsFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1" />
+
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/darker_gray" />
+
+    <fragment
+        android:id="@+id/tasks_details_map_fragment"
+        android:name="com.example.android.networkconnect.MapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1" />
+</LinearLayout>

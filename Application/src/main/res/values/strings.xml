@@ -23,15 +23,11 @@
 
     <string name="map">Map</string>
     <string name="tasks">Tasks</string>
+    <string name="refresh">Refresh</string>
 
+    <string name="title_activity_task_details">Details</string>
+    <string name="title_activity_map">MapActivity</string>
 
-    <string name="welcome_message">Connection test</string>
-    <string name="connection_error">Connection error.</string>
-    <string name="connection_ok">Connection OK.</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="title_activity_task_details">TaskDetailsActivity</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
 </resources>

@@ -14,11 +14,17 @@
   limitations under the License.
   -->
 
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:id="@+id/map"
-        android:showAsAction="ifRoom|withText"
-        android:title="@string/map" />
-    <item android:id="@+id/tasks"
-        android:showAsAction="ifRoom|withText"
-        android:title="@string/tasks" />
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/map_button"
+        android:icon="@android:drawable/ic_menu_mapmode"
+        android:title="@string/map"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/refresh_button"
+        android:icon="@android:drawable/ic_menu_rotate"
+        android:title="@string/refresh"
+        app:showAsAction="always" />
 </menu>
