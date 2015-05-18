@@ -49,6 +49,6 @@ public class Task {
 
     @Override
     public String toString() {
-        return Id + "\n" + Descriprion;
+        return Name + "\n" + Descriprion;
     }
 }

@@ -86,21 +86,25 @@ public class Communicator {
         try {
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject jsonobject = jsonArray.getJSONObject(i);
-                int id = jsonobject.getInt("Id");
-                String name = jsonobject.getString("Name");
-                String description = jsonobject.getString("Description");
-                int state = jsonobject.getInt("TaskState");
-                JSONObject jsonPosition = jsonobject.getJSONObject("Position");
-                double lat = jsonPosition.getDouble("latitude");
-                double lon = jsonPosition.getDouble("longitude");
-
-                Task currentTask = new Task(id, name, description, state, lat, lon);
+                Task currentTask = parseTask(jsonobject);
                 result.add(currentTask);
             }
         } catch (JSONException e) {
 
         }
         return result;
+    }
+
+    public static Task parseTask(JSONObject jsonobject) throws JSONException {
+        int id = jsonobject.getInt("Id");
+        String name = jsonobject.getString("Name");
+        String description = jsonobject.getString("Description");
+        int state = jsonobject.getInt("TaskState");
+        JSONObject jsonPosition = jsonobject.getJSONObject("Position");
+        double lat = jsonPosition.getDouble("latitude");
+        double lon = jsonPosition.getDouble("longitude");
+
+        return new Task(id, name, description, state, lat, lon);
     }
 
     public static void postTask(Task taskToPost){

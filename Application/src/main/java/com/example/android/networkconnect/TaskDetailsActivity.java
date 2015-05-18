@@ -1,5 +1,6 @@
 package com.example.android.networkconnect;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.view.Menu;
@@ -10,6 +11,7 @@ import com.example.android.networkconnect.model.Task;
 
 public class TaskDetailsActivity extends FragmentActivity implements OnFragmentInteractionListener {
 
+    private final static String task_json = "TASK_JSON";
     private TaskDetailsFragment detailsFragment;
 
     @Override
@@ -17,7 +19,13 @@ public class TaskDetailsActivity extends FragmentActivity implements OnFragmentI
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_task_details);
 
+        Intent intent = getIntent();
+
+        Bundle bundle = new Bundle();
+        bundle.putString(task_json, intent.getStringExtra(task_json));
+
         detailsFragment = (TaskDetailsFragment) getSupportFragmentManager().findFragmentById(R.id.task_details_fragment);
+        detailsFragment.setArguments(bundle);
     }
 
     @Override

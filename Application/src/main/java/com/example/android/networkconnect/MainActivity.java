@@ -1,6 +1,7 @@
 package com.example.android.networkconnect;
 
 import android.content.Intent;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.view.Menu;
@@ -8,19 +9,16 @@ import android.view.MenuItem;
 
 import com.example.android.networkconnect.model.Position;
 import com.example.android.networkconnect.model.Task;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationServices;
 
-/**
- * Sample application demonstrating how to connect to the network and fetch raw
- * HTML. It uses AsyncTask to do the fetch on a background thread. To establish
- * the network connection, it uses HttpURLConnection.
- *
- * This sample uses the logging framework to display log output in the log
- * fragment (LogFragment).
- */
-public class MainActivity extends FragmentActivity implements OnFragmentInteractionListener {
+public class MainActivity extends FragmentActivity implements OnFragmentInteractionListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
     private final static String task_json = "TASK_JSON";
     private TasksFragment tasksFragment;
+    private GoogleApiClient mGoogleApiClient;
+    private Location mLastLocation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +27,14 @@ public class MainActivity extends FragmentActivity implements OnFragmentInteract
 
         tasksFragment = (TasksFragment)
                 getSupportFragmentManager().findFragmentById(R.id.tasks_fragment);
+    }
+
+    protected synchronized void buildGoogleApiClient() {
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .addApi(LocationServices.API)
+                .build();
     }
 
     @Override
@@ -66,5 +72,23 @@ public class MainActivity extends FragmentActivity implements OnFragmentInteract
         Intent intent = new Intent(this, TaskDetailsActivity.class);
         intent.putExtra(task_json, task.toJSON());
         startActivity(intent);
+    }
+
+    @Override
+    public void onConnected(Bundle bundle) {
+        mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
+                mGoogleApiClient);
+
+        Communicator.postLocation(new Position(mLastLocation.getLatitude(), mLastLocation.getLongitude()));
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
+
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+
     }
 }
