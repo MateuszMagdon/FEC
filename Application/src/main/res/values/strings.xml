@@ -25,6 +25,7 @@
     <string name="tasks">Tasks</string>
     <string name="refresh">Refresh</string>
 
+    <string name="title_activity_login">FEC</string>
     <string name="title_activity_task_details">Details</string>
     <string name="title_activity_map">MapActivity</string>
 

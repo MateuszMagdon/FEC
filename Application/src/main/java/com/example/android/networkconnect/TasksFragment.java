@@ -16,7 +16,7 @@ public class TasksFragment extends Fragment implements AbsListView.OnItemClickLi
     private OnFragmentInteractionListener mListener;
 
     private AbsListView mListView;
-    private ListAdapter mAdapter;
+    private ArrayAdapter mAdapter;
 
     public TasksFragment() {
     }
@@ -40,6 +40,13 @@ public class TasksFragment extends Fragment implements AbsListView.OnItemClickLi
         mListView.setOnItemClickListener(this);
 
         return view;
+    }
+
+
+    public void refresh() {
+        mAdapter.clear();
+        mAdapter.addAll(Communicator.Tasks);
+        mAdapter.notifyDataSetChanged();
     }
 
     @Override

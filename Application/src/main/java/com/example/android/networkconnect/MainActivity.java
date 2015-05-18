@@ -18,12 +18,14 @@ public class MainActivity extends FragmentActivity implements OnFragmentInteract
     private final static String task_json = "TASK_JSON";
     private TasksFragment tasksFragment;
     private GoogleApiClient mGoogleApiClient;
-    private Location mLastLocation;
+    private Position mLastPosition;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.sample_main);
+
+        buildGoogleApiClient();
 
         tasksFragment = (TasksFragment)
                 getSupportFragmentManager().findFragmentById(R.id.tasks_fragment);
@@ -45,20 +47,23 @@ public class MainActivity extends FragmentActivity implements OnFragmentInteract
                 return true;
             case R.id.refresh_button:
                 Communicator.refresh();
-                Communicator.postLocation(fetchCurrentPosition());
+                sendCurrentPosition();
+                tasksFragment.refresh();
                 return true;
         }
         return false;
+    }
+
+    private void sendCurrentPosition() {
+        if (mLastPosition != null) {
+            Communicator.postLocation(mLastPosition);
+        }
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
-    }
-
-    private Position fetchCurrentPosition() {
-        throw new UnsupportedOperationException();
     }
 
     private void goToMapActivity() {
@@ -76,10 +81,10 @@ public class MainActivity extends FragmentActivity implements OnFragmentInteract
 
     @Override
     public void onConnected(Bundle bundle) {
-        mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
+        Location mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
                 mGoogleApiClient);
 
-        Communicator.postLocation(new Position(mLastLocation.getLatitude(), mLastLocation.getLongitude()));
+        mLastPosition = new Position(mLastLocation.getLatitude(), mLastLocation.getLongitude());
     }
 
     @Override
