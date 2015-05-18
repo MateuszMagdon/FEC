@@ -17,7 +17,7 @@
 
     <fragment
         android:id="@+id/tasks_details_map_fragment"
-        android:name="com.example.android.networkconnect.MapFragment"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1" />

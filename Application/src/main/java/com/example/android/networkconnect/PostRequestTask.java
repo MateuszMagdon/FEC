@@ -2,8 +2,6 @@ package com.example.android.networkconnect;
 
 import android.os.AsyncTask;
 
-import com.example.android.common.logger.Log;
-
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.NameValuePair;
@@ -85,9 +83,9 @@ class PostRequestTask extends AsyncTask<String, String, String> {
                 throw new IOException(statusLine.getReasonPhrase());
             }
         } catch (ClientProtocolException e) {
-            //TODO Handle problems..
+            e.printStackTrace();
         } catch (IOException e) {
-            Log.i(TAG, e.getMessage());
+            e.printStackTrace();
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -109,6 +107,5 @@ class PostRequestTask extends AsyncTask<String, String, String> {
     protected void onPostExecute(String result) {
         super.onPostExecute(result);
         this.result = result;
-        Log.i(TAG, result);
     }
 }

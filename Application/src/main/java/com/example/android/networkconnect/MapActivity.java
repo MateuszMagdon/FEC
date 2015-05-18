@@ -7,7 +7,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.example.android.networkconnect.model.Task;
-
+import com.google.android.gms.maps.MapFragment;
 
 public class MapActivity extends FragmentActivity implements OnFragmentInteractionListener {
 
@@ -18,7 +18,7 @@ public class MapActivity extends FragmentActivity implements OnFragmentInteracti
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
 
-        mapFragment = (MapFragment) getSupportFragmentManager().findFragmentById(R.id.map_fragment);
+        //mapFragment = (MapFragment) getSupportFragmentManager().findFragmentById(R.id.map_fragment);
     }
 
     @Override

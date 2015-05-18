@@ -2,8 +2,6 @@ package com.example.android.networkconnect;
 
 import android.os.AsyncTask;
 
-import com.example.android.common.logger.Log;
-
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.NameValuePair;
@@ -85,6 +83,5 @@ class GetRequestTask extends AsyncTask<String, String, String> {
     protected void onPostExecute(String result) {
         super.onPostExecute(result);
         this.result = result;
-        Log.i(TAG, result);
     }
 }
