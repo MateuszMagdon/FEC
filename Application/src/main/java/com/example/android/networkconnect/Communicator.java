@@ -1,6 +1,5 @@
 package com.example.android.networkconnect;
 
-import android.location.Location;
 import android.os.AsyncTask;
 
 import com.example.android.networkconnect.model.Position;
@@ -22,8 +21,8 @@ import java.util.concurrent.ExecutionException;
  */
 public class Communicator {
     public static final String URI = "http://floodemergencycoordinator.apphb.com";
-    public static List<Task> Tasks;
-    public static List<Location> Locations;
+    public static List<Task> Tasks = new ArrayList<>();
+    public static List<Position> Locations = new ArrayList<>();
     private static JSONObject token = null;
 
     private static String prepareContent(List<NameValuePair> contentList) {
@@ -39,7 +38,7 @@ public class Communicator {
 
     public static void refresh() {
         getTasks();
-//        getLocations();
+        // getLocations();
     }
 
     public static JSONObject logIn(String username, String password){
@@ -65,6 +64,29 @@ public class Communicator {
     public static void getLocations(){
         GetRequestTask task = new GetRequestTask(token);
         JSONArray result = executeAsyncTakAndReturnResultInArray(task, "/api/serviceUnit/locations");
+        Locations = parsePositionsArray(result);
+    }
+
+    private static List<Position> parsePositionsArray(JSONArray jsonArray) {
+        LinkedList<Position> result = new LinkedList<>();
+        try {
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject jsonobject = jsonArray.getJSONObject(i);
+                Position currentTask = parsePosition(jsonobject);
+                result.add(currentTask);
+            }
+        } catch (JSONException e) {
+
+        }
+        return result;
+    }
+
+    public static Position parsePosition(JSONObject jsonobject) throws JSONException {
+
+        double lat = jsonobject.getDouble("latitude");
+        double lon = jsonobject.getDouble("longitude");
+
+        return new Position(lat, lon);
     }
 
     public static void postLocation(Position position){

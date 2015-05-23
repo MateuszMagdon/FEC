@@ -6,19 +6,55 @@ import android.support.v4.app.FragmentActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.example.android.networkconnect.model.Position;
 import com.example.android.networkconnect.model.Task;
-import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 public class MapActivity extends FragmentActivity implements OnFragmentInteractionListener {
 
-    private MapFragment mapFragment;
+    private SupportMapFragment mapFragment;
+    private GoogleMap map;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
+        mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map_fragment);
+        map = mapFragment.getMap();
 
-        //mapFragment = (MapFragment) getSupportFragmentManager().findFragmentById(R.id.map_fragment);
+        setMarkersOnMap();
+    }
+
+    private void setMarkersOnMap() {
+        LatLng latLng = null;
+        for (Task t : Communicator.Tasks) {
+            latLng = new LatLng(t.Position.Longitude, t.Position.Latitude);
+            Marker m = map.addMarker(new MarkerOptions()
+                    .position(latLng)
+                    .title(t.Name)
+                    .icon(BitmapDescriptorFactory
+                            .fromResource(R.drawable.abc_ic_menu_selectall_mtrl_alpha)));
+        }
+
+        for (Position l : Communicator.Locations) {
+            Marker m = map.addMarker(new MarkerOptions()
+                    .position(new LatLng(l.Longitude, l.Latitude))
+                    .title(l.Latitude + " " + l.Longitude)
+                    .icon(BitmapDescriptorFactory
+                            .fromResource(R.drawable.abc_ic_menu_copy_mtrl_am_alpha)));
+        }
+
+        CameraPosition cameraPosition = new CameraPosition.Builder().target(latLng).zoom(13.0f).build();
+        CameraUpdate cameraUpdate = CameraUpdateFactory.newCameraPosition(cameraPosition);
+        map.moveCamera(cameraUpdate);
     }
 
     @Override

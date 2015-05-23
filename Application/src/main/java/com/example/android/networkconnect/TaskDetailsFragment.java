@@ -16,7 +16,7 @@ public class TaskDetailsFragment extends Fragment { // implements AdapterView.On
 
     private final static String task_json = "TASK_JSON";
     private ArrayAdapter<CharSequence> adapter;
-    private Task Task;
+    private Task task;
     private TextView name;
     private TextView description;
     private Spinner state;
@@ -24,20 +24,18 @@ public class TaskDetailsFragment extends Fragment { // implements AdapterView.On
     public TaskDetailsFragment() {
     }
 
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        Task = Communicator.Tasks.get(1);
-        name.setText(Task.Name);
-        description.setText(Task.Descriprion);
-        state.setSelection(adapter.getPosition(Task.TaskState.name()));
+        task = ((TaskDetailsActivity) getActivity()).task;
+        name.setText(task.Name);
+        description.setText(task.Descriprion);
+        state.setSelection(adapter.getPosition(task.TaskState.name()));
     }
 
     private void prepareSpinner(View view) {
@@ -51,19 +49,12 @@ public class TaskDetailsFragment extends Fragment { // implements AdapterView.On
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-//        try {
-//            Task = Communicator.Tasks.get(0);//parseTask(new JSONObject(getArguments().getString(task_json)));
-//            name.setText(Task.Name);
-//            description.setText(Task.Descriprion);
-//            state.setSelection(adapter.getPosition(Task.TaskState.name()));
-//        } catch (Exception e) {
-//        }
-
 
         View view = inflater.inflate(R.layout.fragment_task_details, container, false);
         name = (TextView) view.findViewById(R.id.task_name);
         description = (TextView) view.findViewById(R.id.task_descr);
 
+        task = ((TaskDetailsActivity) getActivity()).task;
         prepareSpinner(view);
 
         return view;
@@ -75,16 +66,16 @@ public class TaskDetailsFragment extends Fragment { // implements AdapterView.On
 //        Object state = parent.getItemAtPosition(position);
 //        switch (state) {
 //            case 0:
-//                Task.TaskState = com.example.android.networkconnect.model.TaskState.OPEN;
+//                task.TaskState = com.example.android.networkconnect.model.TaskState.OPEN;
 //                break;
 //            case 1:
-//                Task.TaskState = com.example.android.networkconnect.model.TaskState.IN_PROGRESS;
+//                task.TaskState = com.example.android.networkconnect.model.TaskState.IN_PROGRESS;
 //                break;
 //            case 2:
-//                Task.TaskState = com.example.android.networkconnect.model.TaskState.FINISHED;
+//                task.TaskState = com.example.android.networkconnect.model.TaskState.FINISHED;
 //                break;
 //        }
-//        Communicator.postTask(Task);
+//        Communicator.postTask(task);
 //    }
 //
 //    @Override

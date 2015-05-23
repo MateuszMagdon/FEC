@@ -15,7 +15,7 @@ import com.google.android.gms.location.LocationServices;
 
 public class MainActivity extends FragmentActivity implements OnFragmentInteractionListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
-    private final static String task_json = "TASK_JSON";
+    private final static String task_id = "TASK_NUMBER";
     private TasksFragment tasksFragment;
     private GoogleApiClient mGoogleApiClient;
     private Position mLastPosition;
@@ -74,8 +74,8 @@ public class MainActivity extends FragmentActivity implements OnFragmentInteract
     @Override
     public void onFragmentInteraction(Task task) {
 
-        Intent intent = new Intent(this, TaskDetailsActivity.class);
-        intent.putExtra(task_json, task.toJSON());
+        Intent intent = new Intent(getApplicationContext(), TaskDetailsActivity.class);
+        intent.putExtra(task_id, Integer.toString(task.Id));
         startActivity(intent);
     }
 
