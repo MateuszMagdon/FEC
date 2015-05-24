@@ -1944,9 +1944,15 @@ containing a value of this type.
         public static final int ic_plusone_small_off_client=0x7f02004f;
         public static final int ic_plusone_standard_off_client=0x7f020050;
         public static final int ic_plusone_tall_off_client=0x7f020051;
-        public static final int powered_by_google_dark=0x7f020052;
-        public static final int powered_by_google_light=0x7f020053;
-        public static final int tile=0x7f020054;
+        public static final int pin=0x7f020052;
+        public static final int powered_by_google_dark=0x7f020053;
+        public static final int powered_by_google_light=0x7f020054;
+        public static final int report=0x7f020055;
+        public static final int task_green=0x7f020056;
+        public static final int task_orange=0x7f020057;
+        public static final int task_red=0x7f020058;
+        public static final int tile=0x7f020059;
+        public static final int unit=0x7f02005a;
     }
     public static final class id {
         public static final int action_bar=0x7f0a0056;

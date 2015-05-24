@@ -8,6 +8,7 @@ import android.view.MenuItem;
 
 import com.example.android.networkconnect.model.Position;
 import com.example.android.networkconnect.model.Task;
+import com.example.android.networkconnect.model.TaskState;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -35,13 +36,26 @@ public class MapActivity extends FragmentActivity implements OnFragmentInteracti
 
     private void setMarkersOnMap() {
         LatLng latLng = null;
+
+
         for (Task t : Communicator.Tasks) {
             latLng = new LatLng(t.Position.Longitude, t.Position.Latitude);
+
+
+            int icon = R.drawable.pin;
+            if (t.TaskState == TaskState.OPEN) {
+                icon = R.drawable.task_red;
+            } else if (t.TaskState == TaskState.IN_PROGRESS) {
+                icon = R.drawable.task_orange;
+            } else if (t.TaskState == TaskState.FINISHED) {
+                icon = R.drawable.task_green;
+            }
+
             Marker m = map.addMarker(new MarkerOptions()
                     .position(latLng)
                     .title(t.Name)
                     .icon(BitmapDescriptorFactory
-                            .fromResource(R.drawable.abc_ic_menu_selectall_mtrl_alpha)));
+                            .fromResource(icon)));
         }
 
         for (Position l : Communicator.Locations) {
@@ -49,7 +63,7 @@ public class MapActivity extends FragmentActivity implements OnFragmentInteracti
                     .position(new LatLng(l.Longitude, l.Latitude))
                     .title(l.Latitude + " " + l.Longitude)
                     .icon(BitmapDescriptorFactory
-                            .fromResource(R.drawable.abc_ic_menu_copy_mtrl_am_alpha)));
+                            .fromResource(R.drawable.unit)));
         }
 
         CameraPosition cameraPosition = new CameraPosition.Builder().target(latLng).zoom(13.0f).build();

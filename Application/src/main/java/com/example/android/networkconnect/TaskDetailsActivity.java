@@ -7,6 +7,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.example.android.networkconnect.model.Task;
+import com.example.android.networkconnect.model.TaskState;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -53,13 +54,23 @@ public class TaskDetailsActivity extends FragmentActivity implements OnFragmentI
         LatLng latLng = null;
 
         latLng = new LatLng(task.Position.Longitude, task.Position.Latitude);
+
+        int icon = R.drawable.pin;
+        if (task.TaskState == TaskState.OPEN) {
+            icon = R.drawable.task_red;
+        } else if (task.TaskState == TaskState.IN_PROGRESS) {
+            icon = R.drawable.task_orange;
+        } else if (task.TaskState == TaskState.FINISHED) {
+            icon = R.drawable.task_green;
+        }
+
         Marker m = map.addMarker(new MarkerOptions()
                 .position(latLng)
                 .title(task.Name)
                 .icon(BitmapDescriptorFactory
-                        .fromResource(R.drawable.abc_ic_commit_search_api_mtrl_alpha)));
+                        .fromResource(icon)));
 
-        CameraPosition cameraPosition = new CameraPosition.Builder().target(latLng).zoom(13.0f).build();
+        CameraPosition cameraPosition = new CameraPosition.Builder().target(latLng).zoom(14.0f).build();
         CameraUpdate cameraUpdate = CameraUpdateFactory.newCameraPosition(cameraPosition);
         map.moveCamera(cameraUpdate);
     }
