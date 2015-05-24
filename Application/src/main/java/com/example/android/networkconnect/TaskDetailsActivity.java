@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.example.android.networkconnect.model.Task;
 import com.google.android.gms.maps.CameraUpdate;
@@ -42,6 +43,10 @@ public class TaskDetailsActivity extends FragmentActivity implements OnFragmentI
         mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.tasks_details_map_fragment);
         map = mapFragment.getMap();
         setMarkerOnMap();
+    }
+
+    public void requestBackup(View view) {
+        detailsFragment.requestBackup(view);
     }
 
     private void setMarkerOnMap() {

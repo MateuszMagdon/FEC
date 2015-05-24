@@ -9,11 +9,26 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.android.networkconnect.TaskDetailsFragment">
 
+
+    <TextView
+        android:id="@+id/task_name_label"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/taskName"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+
     <TextView
         android:id="@+id/task_name"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <TextView
+        android:id="@+id/task_descr_label"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/taskDescription"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
 
     <TextView
         android:id="@+id/task_descr"
@@ -21,10 +36,36 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
+    <TextView
+        android:id="@+id/task_state_label"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/taskState"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+
     <Spinner
         android:id="@+id/task_state"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content" />
 
+    <Button
+        android:id="@+id/request_backup_button"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:onClick="requestBackup"
+        android:text="@string/requestBackupButton" />
+
+    <TextView
+        android:id="@+id/backup_requested_at_label"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/backupRequestedAt"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+
+    <TextView
+        android:id="@+id/backup_requested_date"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
 </LinearLayout>

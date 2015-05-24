@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -15,12 +16,14 @@ import com.example.android.networkconnect.model.Task;
 
 public class TaskDetailsFragment extends Fragment implements AdapterView.OnItemSelectedListener {
 
-    private final static String task_json = "TASK_JSON";
     private ArrayAdapter<CharSequence> adapter;
     private Task task;
     private TextView name;
     private TextView description;
     private Spinner spinner;
+    private Button requestBackupButton;
+    private TextView requestBackupLabel;
+    private TextView requestBackupDate;
 
     public TaskDetailsFragment() {
     }
@@ -37,6 +40,8 @@ public class TaskDetailsFragment extends Fragment implements AdapterView.OnItemS
         name.setText(task.Name);
         description.setText(task.Descriprion);
         spinner.setSelection(adapter.getPosition(task.TaskState.name()));
+
+        handleVisibilityOfBRstuff();
     }
 
     private void prepareSpinner(View view) {
@@ -55,8 +60,10 @@ public class TaskDetailsFragment extends Fragment implements AdapterView.OnItemS
         View view = inflater.inflate(R.layout.fragment_task_details, container, false);
         name = (TextView) view.findViewById(R.id.task_name);
         description = (TextView) view.findViewById(R.id.task_descr);
+        requestBackupButton = (Button) view.findViewById(R.id.request_backup_button);
+        requestBackupLabel = (TextView) view.findViewById(R.id.backup_requested_at_label);
+        requestBackupDate = (TextView) view.findViewById(R.id.backup_requested_date);
 
-        task = ((TaskDetailsActivity) getActivity()).task;
         prepareSpinner(view);
 
         return view;
@@ -79,5 +86,24 @@ public class TaskDetailsFragment extends Fragment implements AdapterView.OnItemS
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
 
+    }
+
+    public void handleVisibilityOfBRstuff() {
+        if (task.BackupRequested) {
+            requestBackupButton.setVisibility(View.GONE);
+            requestBackupDate.setVisibility(View.VISIBLE);
+            requestBackupLabel.setVisibility(View.VISIBLE);
+            requestBackupDate.setText(task.BackupRequestedDate);
+        } else {
+            requestBackupButton.setVisibility(View.VISIBLE);
+            requestBackupDate.setVisibility(View.GONE);
+            requestBackupLabel.setVisibility(View.GONE);
+        }
+    }
+
+    public void requestBackup(View view) {
+        Communicator.postBackupRequest(task);
+        task.setBackupRequested();
+        handleVisibilityOfBRstuff();
     }
 }

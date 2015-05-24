@@ -4,6 +4,9 @@ package com.example.android.networkconnect.model;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 /**
  * Created by mateu_000 on 2015-04-26.
  */
@@ -14,6 +17,8 @@ public class Task {
     public String Descriprion;
     public TaskState TaskState;
     public Position Position;
+    public boolean BackupRequested = false;
+    public String BackupRequestedDate;
 
     public Task(int id, String name, String descriprion, int taskState, double latitude, double longitude) {
         Id = id;
@@ -53,6 +58,21 @@ public class Task {
             object.put("Id", this.Id);
             object.put("Description", this.Descriprion);
             object.put("TaskState", TaskState.ordinal());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return object.toString();
+    }
+
+    public void setBackupRequested() {
+        BackupRequested = true;
+        BackupRequestedDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
+    }
+
+    public String toJSONbackupRequest() {
+        JSONObject object = new JSONObject();
+        try {
+            object.put("Id", this.Id);
         } catch (JSONException e) {
             e.printStackTrace();
         }

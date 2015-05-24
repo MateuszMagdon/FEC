@@ -29,6 +29,13 @@
     <string name="title_activity_task_details">Details</string>
     <string name="title_activity_map">MapActivity</string>
 
+    <string name="taskState">State:</string>
+    <string name="taskDescription">Description:</string>
+    <string name="taskName"></string>
+    <string name="requestBackupButton">Request backup</string>
+    <string name="backupRequestedAt">Backup requested at: </string>
+
+
     <string-array name="task_states">
         <item>OPEN</item>
         <item>IN_PROGRESS</item>
