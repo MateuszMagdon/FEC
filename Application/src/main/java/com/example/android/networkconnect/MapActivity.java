@@ -98,8 +98,9 @@ public class MapActivity extends FragmentActivity implements OnFragmentInteracti
             case R.id.refresh_button:
                 Communicator.refresh();
                 return true;
-            case R.id.tasks_button:
-                finishActivity(0);
+//            case R.id.tasks_button:
+//                finishActivity(0);
+//                return true;
         }
         return super.onOptionsItemSelected(item);
     }

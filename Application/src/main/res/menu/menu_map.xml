@@ -2,11 +2,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.example.android.networkconnect.MapActivity">
 
-    <item
-        android:id="@+id/tasks_button"
-        android:icon="@android:drawable/ic_menu_agenda"
-        android:showAsAction="always"
-        android:title="@string/tasks" />
+    <!--<item-->
+    <!--android:id="@+id/tasks_button"-->
+    <!--android:icon="@android:drawable/ic_menu_agenda"-->
+    <!--android:showAsAction="always"-->
+    <!--android:title="@string/tasks" />-->
 
     <item
         android:id="@+id/refresh_button"
