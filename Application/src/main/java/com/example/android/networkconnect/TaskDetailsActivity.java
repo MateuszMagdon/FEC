@@ -37,12 +37,14 @@ public class TaskDetailsActivity extends FragmentActivity implements OnFragmentI
         if (extras != null) {
             taskId = Integer.parseInt(extras.getString(task_id));
         }
-        task = getTask(taskId);
+        task = getTaskById(taskId);
 
         detailsFragment = (TaskDetailsFragment) getSupportFragmentManager().findFragmentById(R.id.task_details_fragment);
 
         mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.tasks_details_map_fragment);
         map = mapFragment.getMap();
+        map.setMyLocationEnabled(true);
+
         setMarkerOnMap();
     }
 
@@ -70,12 +72,13 @@ public class TaskDetailsActivity extends FragmentActivity implements OnFragmentI
                 .icon(BitmapDescriptorFactory
                         .fromResource(icon)));
 
-        CameraPosition cameraPosition = new CameraPosition.Builder().target(latLng).zoom(14.0f).build();
+
+        CameraPosition cameraPosition = new CameraPosition.Builder().target(latLng).zoom(13.0f).build();
         CameraUpdate cameraUpdate = CameraUpdateFactory.newCameraPosition(cameraPosition);
         map.moveCamera(cameraUpdate);
     }
 
-    private Task getTask(int taskId) {
+    private Task getTaskById(int taskId) {
         Task result = null;
         for (Task t : Communicator.Tasks) {
             if (t.Id == taskId) {

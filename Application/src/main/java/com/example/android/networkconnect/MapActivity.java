@@ -16,10 +16,13 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-public class MapActivity extends FragmentActivity implements OnFragmentInteractionListener {
+public class MapActivity extends FragmentActivity implements OnFragmentInteractionListener, GoogleMap.OnInfoWindowClickListener {
+
+    private final static String task_id = "TASK_NUMBER";
 
     private SupportMapFragment mapFragment;
     private GoogleMap map;
@@ -30,6 +33,8 @@ public class MapActivity extends FragmentActivity implements OnFragmentInteracti
         setContentView(R.layout.activity_map);
         mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map_fragment);
         map = mapFragment.getMap();
+        map.setOnInfoWindowClickListener(this);
+        map.setMyLocationEnabled(true);
 
         setMarkersOnMap();
     }
@@ -37,6 +42,7 @@ public class MapActivity extends FragmentActivity implements OnFragmentInteracti
     private void setMarkersOnMap() {
         LatLng latLng = null;
 
+        LatLngBounds.Builder builder = new LatLngBounds.Builder();
 
         for (Task t : Communicator.Tasks) {
             latLng = new LatLng(t.Position.Longitude, t.Position.Latitude);
@@ -56,6 +62,8 @@ public class MapActivity extends FragmentActivity implements OnFragmentInteracti
                     .title(t.Name)
                     .icon(BitmapDescriptorFactory
                             .fromResource(icon)));
+
+            builder.include(m.getPosition());
         }
 
         for (Position l : Communicator.Locations) {
@@ -64,9 +72,16 @@ public class MapActivity extends FragmentActivity implements OnFragmentInteracti
                     .title(l.Latitude + " " + l.Longitude)
                     .icon(BitmapDescriptorFactory
                             .fromResource(R.drawable.unit)));
+
+            builder.include(m.getPosition());
         }
 
-        CameraPosition cameraPosition = new CameraPosition.Builder().target(latLng).zoom(13.0f).build();
+        LatLngBounds bounds = builder.build();
+
+        int padding = 5; // offset from edges of the map in pixels
+        CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, padding);
+
+        CameraPosition cameraPosition = new CameraPosition.Builder().target(latLng).zoom(14.0f).build();
         CameraUpdate cameraUpdate = CameraUpdateFactory.newCameraPosition(cameraPosition);
         map.moveCamera(cameraUpdate);
     }
@@ -80,10 +95,6 @@ public class MapActivity extends FragmentActivity implements OnFragmentInteracti
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.tasks_button:
-                Intent intent = new Intent(this, MainActivity.class);
-                startActivity(intent);
-                return true;
             case R.id.refresh_button:
                 Communicator.refresh();
                 return true;
@@ -94,5 +105,25 @@ public class MapActivity extends FragmentActivity implements OnFragmentInteracti
     @Override
     public void onFragmentInteraction(Task task) {
 
+    }
+
+    private Task getTaskByName(String name) {
+        Task result = null;
+        for (Task t : Communicator.Tasks) {
+            if (t.Name.equals(name)) {
+                result = t;
+                break;
+            }
+        }
+        return result;
+    }
+
+    @Override
+    public void onInfoWindowClick(Marker marker) {
+        Task t = getTaskByName(marker.getTitle());
+
+        Intent intent = new Intent(getApplicationContext(), TaskDetailsActivity.class);
+        intent.putExtra(task_id, Integer.toString(t.Id));
+        startActivity(intent);
     }
 }

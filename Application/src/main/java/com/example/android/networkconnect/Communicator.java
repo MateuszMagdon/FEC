@@ -38,7 +38,7 @@ public class Communicator {
 
     public static void refresh() {
         getTasks();
-        // getLocations();
+        getLocations();
     }
 
     public static JSONObject logIn(String username, String password){
@@ -61,15 +61,18 @@ public class Communicator {
         task.execute("/api/serviceUnit/testMessage");
     }
 
-    public static void getLocations(){
+    public static List<Position> getLocations() {
         GetRequestTask task = new GetRequestTask(token);
         JSONArray result = executeAsyncTakAndReturnResultInArray(task, "/api/serviceUnit/locations");
+
         Locations = parsePositionsArray(result);
+        return Locations;
     }
 
     private static List<Position> parsePositionsArray(JSONArray jsonArray) {
         LinkedList<Position> result = new LinkedList<>();
         try {
+            if (jsonArray == null) return result;
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject jsonobject = jsonArray.getJSONObject(i);
                 Position currentTask = parsePosition(jsonobject);

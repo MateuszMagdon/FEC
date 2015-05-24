@@ -2,6 +2,8 @@ package com.example.android.networkconnect;
 
 import android.content.Intent;
 import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.view.Menu;
@@ -9,34 +11,41 @@ import android.view.MenuItem;
 
 import com.example.android.networkconnect.model.Position;
 import com.example.android.networkconnect.model.Task;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.LocationServices;
 
-public class MainActivity extends FragmentActivity implements OnFragmentInteractionListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+public class MainActivity extends FragmentActivity implements OnFragmentInteractionListener {
 
     private final static String task_id = "TASK_NUMBER";
+    public Position mLastPosition;
+    private final LocationListener mLocationListener = new LocationListener() {
+        public void onLocationChanged(Location location) {
+            mLastPosition = new Position(location.getLongitude(), location.getLatitude());
+            sendCurrentPosition();
+        }
+
+        public void onStatusChanged(String provider, int status, Bundle extras) {
+        }
+
+        public void onProviderEnabled(String provider) {
+        }
+
+        public void onProviderDisabled(String provider) {
+        }
+    };
     private TasksFragment tasksFragment;
-    private GoogleApiClient mGoogleApiClient;
-    private Position mLastPosition;
+    private LocationManager mLocationManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.sample_main);
 
-        buildGoogleApiClient();
-
         tasksFragment = (TasksFragment)
                 getSupportFragmentManager().findFragmentById(R.id.tasks_fragment);
-    }
 
-    protected synchronized void buildGoogleApiClient() {
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
-                .addApi(LocationServices.API)
-                .build();
+        mLocationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+
+        mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 10l,
+                1.0f, mLocationListener);
     }
 
     @Override
@@ -77,23 +86,5 @@ public class MainActivity extends FragmentActivity implements OnFragmentInteract
         Intent intent = new Intent(getApplicationContext(), TaskDetailsActivity.class);
         intent.putExtra(task_id, Integer.toString(task.Id));
         startActivity(intent);
-    }
-
-    @Override
-    public void onConnected(Bundle bundle) {
-        Location mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
-                mGoogleApiClient);
-
-        mLastPosition = new Position(mLastLocation.getLatitude(), mLastLocation.getLongitude());
-    }
-
-    @Override
-    public void onConnectionSuspended(int i) {
-
-    }
-
-    @Override
-    public void onConnectionFailed(ConnectionResult connectionResult) {
-
     }
 }

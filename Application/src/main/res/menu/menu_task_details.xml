@@ -1,11 +1,10 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.example.android.networkconnect.TaskDetailsActivity">
 
     <item
         android:id="@+id/refresh_button"
         android:icon="@android:drawable/ic_menu_rotate"
-        android:title="@string/refresh"
-        app:showAsAction="always" />
+        android:showAsAction="always"
+        android:title="@string/refresh" />
 </menu>
