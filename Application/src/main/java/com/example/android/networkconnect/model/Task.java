@@ -47,6 +47,18 @@ public class Task {
         return object.toString();
     }
 
+    public String toJSONupdate() {
+        JSONObject object = new JSONObject();
+        try {
+            object.put("Id", this.Id);
+            object.put("Description", this.Descriprion);
+            object.put("TaskState", TaskState.ordinal());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return object.toString();
+    }
+
     @Override
     public String toString() {
         return Name + "\n" + Descriprion;

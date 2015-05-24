@@ -135,6 +135,12 @@ public class Communicator {
         JSONObject result = executeAsyncTakAndReturnResult(task, "/api/serviceUnit/task");
     }
 
+    public static void updateTask(Task taskToPost) {
+        PostRequestTask task = new PostRequestTask(token);
+        task.addContent(taskToPost.toJSONupdate());
+        JSONObject result = executeAsyncTakAndReturnResult(task, "/api/serviceUnit/task");
+    }
+
     public static void postBackupRequest(int taskId){
         PostRequestTask task = new PostRequestTask(token);
         task.addContent("{TaskId: " + taskId + " }");
