@@ -33,9 +33,9 @@ public class LoginActivity extends Activity {
 
         String login = username.getText().toString();
         String password = this.password.getText().toString();
-
-        login = "testUser";
-        password = "qwerty";
+//
+//        login = "testUser";
+//        password = "qwerty";
 
         JSONObject token = Communicator.logIn(login, password);
 

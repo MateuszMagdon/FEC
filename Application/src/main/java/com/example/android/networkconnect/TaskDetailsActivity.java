@@ -73,7 +73,7 @@ public class TaskDetailsActivity extends FragmentActivity implements OnFragmentI
                         .fromResource(icon)));
 
 
-        CameraPosition cameraPosition = new CameraPosition.Builder().target(latLng).zoom(13.0f).build();
+        CameraPosition cameraPosition = new CameraPosition.Builder().target(latLng).zoom(15.0f).build();
         CameraUpdate cameraUpdate = CameraUpdateFactory.newCameraPosition(cameraPosition);
         map.moveCamera(cameraUpdate);
     }
