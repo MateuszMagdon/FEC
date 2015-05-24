@@ -18,8 +18,8 @@ public class Position {
     public JSONObject toJSON(){
         JSONObject object = new JSONObject();
         try {
-            object.put("Latitude", this.Latitude);
-            object.put("Longitude", this.Longitude);
+            object.put("latitude", this.Latitude);
+            object.put("longitude", this.Longitude);
         } catch (JSONException e) {
             e.printStackTrace();
         }

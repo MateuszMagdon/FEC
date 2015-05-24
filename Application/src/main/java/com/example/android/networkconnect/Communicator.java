@@ -56,11 +56,6 @@ public class Communicator {
         return token;
     }
 
-    public static void testConnection(){
-        GetRequestTask task = new GetRequestTask(token);
-        task.execute("/api/serviceUnit/testMessage");
-    }
-
     public static List<Position> getLocations() {
         GetRequestTask task = new GetRequestTask(token);
         JSONArray result = executeAsyncTakAndReturnResultInArray(task, "/api/serviceUnit/locations");

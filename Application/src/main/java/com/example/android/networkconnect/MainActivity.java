@@ -15,7 +15,7 @@ import com.example.android.networkconnect.model.Task;
 public class MainActivity extends FragmentActivity implements OnFragmentInteractionListener {
 
     private final static String task_id = "TASK_NUMBER";
-    public Position mLastPosition;
+    public Position mLastPosition = new Position(19.912905, 50.067862);
     private final LocationListener mLocationListener = new LocationListener() {
         public void onLocationChanged(Location location) {
             mLastPosition = new Position(location.getLongitude(), location.getLatitude());
